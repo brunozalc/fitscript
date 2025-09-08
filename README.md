@@ -8,7 +8,7 @@
 
 Geralmente, treinos de academia são listas estáticas de exercícios, seja no papel, num arquivo PDF ou em um aplicativo de celular, com pouca customização. Essas ferramentas, na maioria das vezes, não levam em consideração seu nível de energia, tempo disponível ou eventuais lesões.
 
-A ideia do Fitscript é fazer com que seja possível programar seus treinos como *scripts*, ao invés de listas. Os exercícios de um treino poderiam ser considerados (ou não) a depender do nível de energia do usuário, por exemplo.
+A ideia do Fitscript é fazer com que seja possível programar seus treinos como *scripts*, ao invés de listas. Os exercícios de um treino poderiam ser considerados (ou não) a depender do nível de energia do usuário ou outras métricas. Por exemplo:
 
 ```
 routine "Leg Day"
