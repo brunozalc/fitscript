@@ -1,7 +1,20 @@
+# Build and output directories
+build/
+output/
+
 # Compiled executables
 fitscript
 parser
 interpreter
+
+# Flex/Bison generated files
+lex.yy.c
+*.tab.c
+*.tab.h
+
+# Generated assembly and JSON
+*.fasm
+*.json
 
 # Prerequisites
 *.d
