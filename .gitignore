@@ -3,7 +3,6 @@ build/
 output/
 
 # Compiled executables
-fitscript
 parser
 interpreter
 
@@ -12,9 +11,6 @@ lex.yy.c
 *.tab.c
 *.tab.h
 
-# Generated assembly and JSON
-*.fasm
-*.json
 
 # Prerequisites
 *.d
