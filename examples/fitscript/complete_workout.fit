@@ -1,0 +1,65 @@
+// Exemplo completo com if-else e loops
+routine "Complete Adaptive Workout" {
+    let energy = read_sensor(ENERGY_LEVEL);
+    let time = read_sensor(TIME_AVAILABLE);
+
+    // Warm-up sempre
+    exercise "Dynamic Stretching" {
+        sets: 1;
+        duration: 300;
+    }
+
+    // Treino baseado em energia
+    if (energy > 7) {
+        exercise "High Intensity Squats" {
+            sets: 5;
+            reps: 10;
+            weight: 120kg;
+        }
+        
+        exercise "Deadlifts" {
+            sets: 4;
+            reps: 8;
+            weight: 140kg;
+        }
+    } else {
+        exercise "Moderate Squats" {
+            sets: 3;
+            reps: 8;
+            weight: 80kg;
+        }
+        
+        exercise "Lunges" {
+            sets: 2;
+            reps: 10;
+        }
+    }
+
+    // Cardio baseado em tempo disponível
+    if (time > 45) {
+        exercise "Long Run" {
+            sets: 1;
+            duration: 1200;
+        }
+    } else {
+        exercise "Quick Interval Training" {
+            sets: 1;
+            duration: 600;
+        }
+    }
+
+    // Exercícios finais (sempre 3 vezes)
+    loop 3 times {
+        exercise "Core Plank" {
+            sets: 1;
+            duration: 60;
+        }
+    }
+
+    // Cool-down
+    exercise "Static Stretching" {
+        sets: 1;
+        duration: 300;
+    }
+}
+

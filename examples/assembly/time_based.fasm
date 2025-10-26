@@ -1,0 +1,36 @@
+; FitWatch Assembly - Time-Based Routine
+; Creates different routines based on available time
+
+; Read available time in minutes
+SENSOR R0 TIME_AVAILABLE
+
+; Check if time >= 30 minutes
+MOV R1 30
+subtract_30:
+JZ R1 check_time
+DEC R0
+DEC R1
+JNZ R1 subtract_30
+
+check_time:
+JZ R0 short_routine  ; If R0 is 0, we had exactly 30 or less minutes
+
+long_routine:
+; Full workout (> 30 minutes)
+EXERCISE "Warm-up Run" sets:1 duration:600
+EXERCISE "Bench Press" sets:4 reps:10 weight:80
+EXERCISE "Deadlift" sets:4 reps:8 weight:120
+EXERCISE "Pull-ups" sets:3 reps:10
+EXERCISE "Dips" sets:3 reps:12
+EXERCISE "Core Work" sets:1 duration:300
+HALT
+
+short_routine:
+; Quick workout (<= 30 minutes)
+EXERCISE "Quick Warm-up" sets:1 duration:180
+EXERCISE "Push-ups" sets:3 reps:15
+EXERCISE "Squats" sets:3 reps:20
+EXERCISE "Plank" sets:2 duration:45
+
+HALT
+

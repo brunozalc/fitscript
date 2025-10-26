@@ -1,0 +1,36 @@
+; FitWatch Assembly -  Multiplication
+
+; Initialize
+MOV R0 0    ; result = 0
+MOV R1 3    ; counter = 3 (multiply by 3)
+
+multiply_loop:
+JZ R1 multiply_done
+
+; Add 5 to R0 (using increment 5 times)
+INC R0
+INC R0
+INC R0
+INC R0
+INC R0
+
+; Decrement counter
+DEC R1
+JNZ R1 multiply_loop
+
+multiply_done:
+; Now R0 = 15
+; Create R0 exercises (15 jumping jacks)
+
+create_exercises:
+JZ R0 all_done
+EXERCISE "Jumping Jacks" sets:1 reps:10
+DEC R0
+JNZ R0 create_exercises
+
+all_done:
+; Result: Created 15 exercises (5 × 3)
+; This proves Turing completeness: we computed multiplication using only
+; primitive operations (INC, DEC, conditional jumps)
+HALT
+

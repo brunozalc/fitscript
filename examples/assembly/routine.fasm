@@ -1,0 +1,35 @@
+; FitWatch Assembly - Basic Workout Routine
+; This program demonstrates conditional exercises based on energy level
+
+; Read energy level from sensor
+SENSOR R0 ENERGY_LEVEL
+
+; Always do squats (core exercise)
+EXERCISE "Squat" sets:3 reps:8 weight:110
+
+; Check if energy > 7 for bonus exercise
+; Subtract 7 from R0 to check
+MOV R1 7
+subtract_loop:
+JZ R1 check_energy
+DEC R0
+DEC R1
+JNZ R1 subtract_loop
+
+check_energy:
+; If R0 > 0 (original energy was > 7), do leg press
+JZ R0 skip_legpress
+EXERCISE "Leg Press" sets:3 reps:12 weight:225
+
+skip_legpress:
+; Loop 3 times for calf raises
+MOV R0 3
+calf_loop:
+JZ R0 end_routine
+EXERCISE "Calf Raises" sets:1 reps:15
+DEC R0
+JNZ R0 calf_loop
+
+end_routine:
+HALT
+

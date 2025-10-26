@@ -1,0 +1,32 @@
+; FitWatch Assembly - Heart Rate Adaptive Routine
+; Adjusts workout based on heart rate sensor reading
+
+; Read heart rate
+SENSOR R0 HEART_RATE
+
+; If heart rate < 100, do high intensity
+MOV R1 100
+subtract_100:
+JZ R1 check_hr_low
+DEC R0
+DEC R1
+JNZ R1 subtract_100
+
+check_hr_low:
+; If R0 > 0 (HR was > 100), do low intensity
+JZ R0 high_intensity
+
+low_intensity:
+EXERCISE "Walking" sets:1 duration:600
+EXERCISE "Light Stretching" sets:5 duration:30
+JNZ R1 end_routine  ; Jump to end (R1 is 0, so this won't jump, but we can use HALT)
+HALT
+
+high_intensity:
+EXERCISE "Burpees" sets:3 reps:15
+EXERCISE "Mountain Climbers" sets:3 reps:20
+EXERCISE "Jump Squats" sets:3 reps:12
+
+end_routine:
+HALT
+

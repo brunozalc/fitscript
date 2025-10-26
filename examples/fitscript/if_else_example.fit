@@ -1,0 +1,27 @@
+// Teste do else
+routine "Test Else" {
+    let energy = read_sensor(ENERGY_LEVEL);
+
+    exercise "Warm-up" {
+        sets: 1;
+        reps: 10;
+    }
+
+    if (energy > 7) {
+        exercise "High Energy Workout" {
+            sets: 5;
+            reps: 10;
+        }
+    } else {
+        exercise "Low Energy Workout" {
+            sets: 2;
+            reps: 5;
+        }
+    }
+
+    exercise "Cool-down" {
+        sets: 1;
+        reps: 5;
+    }
+}
+

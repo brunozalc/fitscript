@@ -1,0 +1,10 @@
+; FitWatch Assembly - Simple routine
+; Just add a few exercises without any logic
+
+EXERCISE "Warm-up Jog" sets:1 reps:1 duration:300
+EXERCISE "Push-ups" sets:3 reps:15
+EXERCISE "Plank" sets:3 duration:60
+EXERCISE "Cool-down Stretch" sets:1 duration:180
+
+HALT
+
