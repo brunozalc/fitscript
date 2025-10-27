@@ -8,7 +8,7 @@
 
 Geralmente, treinos de academia são listas estáticas de exercícios, seja no papel, num arquivo PDF ou em um aplicativo de celular, com pouca customização. Essas ferramentas, na maioria das vezes, não levam em consideração seu nível de energia, tempo disponível ou eventuais lesões.
 
-A ideia do Fitscript é fazer com que seja possível programar seus treinos como *scripts*, ao invés de listas. Os exercícios de um treino poderiam ser considerados (ou não) a depender do nível de energia do usuário, tempo disponível ou outras métricas. Por exemplo:
+A ideia do Fitscript é fazer com que seja possível programar seus treinos como _scripts_, ao invés de listas. Os exercícios de um treino poderiam ser considerados (ou não) a depender do nível de energia do usuário, tempo disponível ou outras métricas. Por exemplo:
 
 ```fitscript
 routine "Leg Day" {
@@ -198,16 +198,16 @@ FitWatch é uma pequena máquina virtual que representa a lógica de um smartwat
 
 ### Conjunto de Instruções (7 instruções)
 
-| Instrução | Descrição | Exemplo |
-|-----------|-----------|---------|
-| `INC reg` | Incrementa registrador | `INC R0` |
-| `DEC reg` | Decrementa registrador | `DEC R1` |
-| `JZ reg label` | Pula se zero | `JZ R0 end` |
-| `JNZ reg label` | Pula se não-zero | `JNZ R1 loop` |
-| `MOV reg value` | Move valor imediato | `MOV R0 10` |
-| `SENSOR reg name` | Lê sensor | `SENSOR R0 ENERGY_LEVEL` |
-| `EXERCISE name props...` | Adiciona exercício | `EXERCISE "Squat" sets:3` |
-| `HALT` | Para execução | `HALT` |
+| Instrução                | Descrição              | Exemplo                   |
+| ------------------------ | ---------------------- | ------------------------- |
+| `INC reg`                | Incrementa registrador | `INC R0`                  |
+| `DEC reg`                | Decrementa registrador | `DEC R1`                  |
+| `JZ reg label`           | Pula se zero           | `JZ R0 end`               |
+| `JNZ reg label`          | Pula se não-zero       | `JNZ R1 loop`             |
+| `MOV reg value`          | Move valor imediato    | `MOV R0 10`               |
+| `SENSOR reg name`        | Lê sensor              | `SENSOR R0 ENERGY_LEVEL`  |
+| `EXERCISE name props...` | Adiciona exercício     | `EXERCISE "Squat" sets:3` |
+| `HALT`                   | Para execução          | `HALT`                    |
 
 ### Uso da VM
 
