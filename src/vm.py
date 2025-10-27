@@ -9,13 +9,10 @@ from typing import Any, Dict, List
 
 @dataclass
 class Exercise:
-    """Represents a workout exercise with properties."""
-
     name: str
     properties: Dict[str, Any]
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert exercise to dictionary format."""
         return {"name": self.name, **self.properties}
 
 
@@ -40,7 +37,6 @@ class FitWatchVM:
     """
 
     def __init__(self, debug: bool = False):
-        """Initialize the FitWatch VM."""
         self.registers = {"R0": 0, "R1": 0}
         self.pc = 0
         self.sensors: Dict[str, int] = {}
@@ -51,13 +47,11 @@ class FitWatchVM:
         self.cycle_count = 0
 
     def set_sensor(self, name: str, value: int) -> None:
-        """Set a sensor value."""
         self.sensors[name] = value
         if self.debug:
             print(f"[DEBUG] Set sensor {name} = {value}")
 
     def load_program(self, filename: str) -> None:
-        """Load a FitWatch assembly program from file."""
         with open(filename, "r") as f:
             lines = f.readlines()
 
@@ -87,15 +81,13 @@ class FitWatchVM:
             print(f"[DEBUG] Loaded {len(self.program)} instructions")
             print(f"[DEBUG] Labels: {self.labels}")
 
-    def parse_instruction(self, instruction: str) -> tuple:
-        """Parse an instruction string into opcode and operands."""
+    def parse_instruction(self, instruction: str):
         parts = instruction.split(None, 1)
         opcode = parts[0].upper()
         operands = parts[1] if len(parts) > 1 else ""
         return opcode, operands
 
     def parse_exercise_props(self, props_str: str) -> Dict[str, Any]:
-        """Parse exercise properties from string like 'sets:3 reps:8 weight:110'."""
         props = {}
         if not props_str.strip():
             return props
@@ -114,10 +106,6 @@ class FitWatchVM:
         return props
 
     def execute_instruction(self, instruction: str) -> bool:
-        """
-        Execute a single instruction.
-        Returns True to continue, False to halt.
-        """
         opcode, operands = self.parse_instruction(instruction)
 
         if self.debug:
@@ -212,18 +200,15 @@ class FitWatchVM:
 
         # EXERCISE "name" props...
         elif opcode == "EXERCISE":
-            # Parse exercise name (in quotes) and properties
             if not operands:
                 raise ValueError(f"EXERCISE requires name: {instruction}")
 
-            # Extract name in quotes
             if '"' in operands:
                 start_quote = operands.index('"')
                 end_quote = operands.index('"', start_quote + 1)
                 name = operands[start_quote + 1 : end_quote]
                 props_str = operands[end_quote + 1 :].strip()
             else:
-                # Name without quotes (single word)
                 parts = operands.split(None, 1)
                 name = parts[0]
                 props_str = parts[1] if len(parts) > 1 else ""
@@ -247,10 +232,6 @@ class FitWatchVM:
         return True
 
     def run(self) -> List[Exercise]:
-        """
-        Execute the loaded program.
-        Returns the list of exercises added to the routine.
-        """
         self.pc = 0
         self.cycle_count = 0
 
@@ -272,7 +253,6 @@ class FitWatchVM:
         return self.exercises
 
     def export_routine_json(self, routine_name: str = "Workout Routine") -> str:
-        """Export the routine as JSON."""
         routine = {
             "routine": routine_name,
             "exercises": [ex.to_dict() for ex in self.exercises],
@@ -281,7 +261,6 @@ class FitWatchVM:
 
 
 def main():
-    """Main entry point for the FitWatch VM."""
     parser = argparse.ArgumentParser(
         description="FitWatch VM - Execute fitness routine assembly programs",
         formatter_class=argparse.RawDescriptionHelpFormatter,
