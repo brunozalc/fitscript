@@ -1,0 +1,26 @@
+{
+  "routine": "Leg Day",
+  "exercises": [
+    {
+      "name": "Squat",
+      "sets": 3,
+      "reps": 8,
+      "weight": "110kg"
+    },
+    {
+      "name": "Calf Raises",
+      "sets": 1,
+      "reps": 15
+    },
+    {
+      "name": "Calf Raises",
+      "sets": 1,
+      "reps": 15
+    },
+    {
+      "name": "Calf Raises",
+      "sets": 1,
+      "reps": 15
+    }
+  ]
+}
