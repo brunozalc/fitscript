@@ -100,7 +100,7 @@ statement:
     ;
 
 routine_def:
-    ROUTINE STRING LBRACE 
+    ROUTINE STRING LBRACE
     {
         emit_comment("==============================================");
         emit_comment("Routine: %s", $2);
@@ -173,7 +173,7 @@ assignment:
     {
         char *reg = allocate_register($2);
         emit_comment("%s = %s", $2, $4);
-        
+
         // Check if expression is a sensor read or number
         if (strncmp($4, "SENSOR:", 7) == 0) {
             char *sensor = $4 + 7;
@@ -181,7 +181,7 @@ assignment:
         } else {
             emit("MOV %s %s", reg, $4);
         }
-        
+
         free($2);
         free($4);
     }
@@ -237,8 +237,8 @@ loop_count:
     {
         $$ = $1;
     }
-    | IDENTIFIER 
-    { 
+    | IDENTIFIER
+    {
         fprintf(stderr, "Error: Loop count by variable not yet supported\n");
         exit(1);
     }
@@ -268,8 +268,8 @@ expression:
     {
         $$ = $1;
     }
-    | IDENTIFIER 
-    { 
+    | IDENTIFIER
+    {
         $$ = strdup($1);
         free($1);
     }
@@ -301,8 +301,8 @@ value:
         sprintf(str, "%d", $1);
         $$ = str;
     }
-    | STRING 
-    { 
+    | STRING
+    {
         $$ = $1;
     }
     ;
@@ -355,13 +355,13 @@ char *allocate_register(const char *var_name) {
             return var_table[i].reg;
         }
     }
-    
+
     // Allocate new
     if (var_count < 2) {
         var_table[var_count].name = strdup(var_name);
         return var_table[var_count++].reg;
     }
-    
+
     // Reuse R1 if out of registers
     fprintf(stderr, "Warning: Reusing R1 for variable '%s'\n", var_name);
     if (var_table[1].name) free(var_table[1].name);
@@ -400,9 +400,9 @@ void generate_condition_check(const char *var, int op, int value) {
         fprintf(stderr, "Error: Variable '%s' not defined\n", var);
         exit(1);
     }
-    
+
     emit_comment("if (%s %s %d)", var, op == GT ? ">" : "==", value);
-    
+
     if (op == GT) {
         // Generate > comparison
         emit("MOV R1 %d", value);
@@ -413,7 +413,7 @@ void generate_condition_check(const char *var, int op, int value) {
         emit("DEC R1");
         emit("JNZ R1 %s", subtract_label);
         emit("check_cond:");
-        
+
         // Jump past the if block if condition is false (reg == 0)
         char *endif_label = new_label("endif");
         emit("JZ %s %s", reg, endif_label);
@@ -428,7 +428,7 @@ void generate_condition_check(const char *var, int op, int value) {
         emit("DEC R1");
         emit("JNZ R1 %s", subtract_label);
         emit("check_eq:");
-        
+
         // Jump past the if block if condition is false (reg != 0)
         char *endif_label = new_label("endif");
         emit("JNZ %s %s", reg, endif_label);
@@ -443,9 +443,9 @@ void generate_condition_check_with_else(const char *var, int op, int value) {
         fprintf(stderr, "Error: Variable '%s' not defined\n", var);
         exit(1);
     }
-    
+
     emit_comment("if (%s %s %d)", var, op == GT ? ">" : "==", value);
-    
+
     if (op == GT) {
         emit("MOV R1 %d", value);
         char *subtract_label = new_label("subtract");
@@ -456,7 +456,7 @@ void generate_condition_check_with_else(const char *var, int op, int value) {
         emit("JNZ R1 %s", subtract_label);
         emit("check_cond:");
         free(subtract_label);
-        
+
         char *else_label = new_label("else");
         emit("JZ %s %s", reg, else_label);
         saved_labels[saved_label_count++] = else_label;
@@ -470,7 +470,7 @@ void generate_condition_check_with_else(const char *var, int op, int value) {
         emit("JNZ R1 %s", subtract_label);
         emit("check_eq:");
         free(subtract_label);
-        
+
         char *else_label = new_label("else");
         emit("JNZ %s %s", reg, else_label);
         saved_labels[saved_label_count++] = else_label;
@@ -524,12 +524,12 @@ void end_loop() {
 
 int main(int argc, char **argv) {
     char *output_filename = NULL;
-    
+
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <input.fit> [-o output.fasm]\n", argv[0]);
         return 1;
     }
-    
+
     // Parse arguments
     FILE *file = fopen(argv[1], "r");
     if (!file) {
@@ -537,7 +537,7 @@ int main(int argc, char **argv) {
         return 1;
     }
     yyin = file;
-    
+
     // Check for output file option
     if (argc >= 4 && strcmp(argv[2], "-o") == 0) {
         output_filename = argv[3];
@@ -549,30 +549,30 @@ int main(int argc, char **argv) {
     } else {
         output_file = stdout;
     }
-    
+
     // Emit header
     emit_comment("FitWatch Assembly");
     emit_comment("Generated from: %s", argv[1]);
     emit("");
-    
+
     // Parse and generate code
     int result = yyparse();
-    
+
     if (result == 0) {
         if (output_filename) {
             fprintf(stderr, "Compilation successful! Assembly written to %s\n", output_filename);
-            fprintf(stderr, "Run with: python3 vm.py %s\n", output_filename);
+            fprintf(stderr, "Run with: python3 src/vm.py %s\n", output_filename);
         }
     } else {
         fprintf(stderr, "Compilation failed.\n");
     }
-    
+
     // Cleanup
     reset_codegen();
     if (output_file != stdout) {
         fclose(output_file);
     }
     fclose(file);
-    
+
     return result;
 }
