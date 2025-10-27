@@ -48,7 +48,6 @@ class FitWatchVM:
         self.labels: Dict[str, int] = {}
         self.program: List[str] = []
         self.debug = debug
-        self.max_cycles = 100000  # Prevent infinite loops
         self.cycle_count = 0
 
     def set_sensor(self, name: str, value: int) -> None:
@@ -256,11 +255,6 @@ class FitWatchVM:
         self.cycle_count = 0
 
         while self.pc < len(self.program):
-            if self.cycle_count >= self.max_cycles:
-                raise RuntimeError(
-                    f"Maximum cycle count ({self.max_cycles}) exceeded. Possible infinite loop."
-                )
-
             instruction = self.program[self.pc]
             should_continue = self.execute_instruction(instruction)
 
