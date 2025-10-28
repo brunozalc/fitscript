@@ -2,6 +2,8 @@
 
 **Fitscript** é uma linguagem de programação que permite que você organize seus treinos de forma customizada e adaptável.
 
+Veja a apresentação da linguagem [aqui](https://github.com/brunozalc/fitscript/blob/main/FitScript.pdf).
+
 ---
 
 ## Motivação
