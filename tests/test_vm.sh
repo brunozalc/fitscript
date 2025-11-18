@@ -70,6 +70,14 @@ run_test "Execute multiplication (5×3=15, Turing completeness demo)" \
 run_test "Heart rate adaptive routine" \
     "python3 src/vm.py examples/assembly/heart_rate_adaptive.fasm --sensor HEART_RATE=110"
 
+# Test 11: Stack PUSH/POP behavior
+run_test "Stack PUSH/POP restores the original counter" \
+    "[ $(python3 src/vm.py examples/assembly/stack_demo.fasm | grep -c 'Stack Push-ups') -eq 3 ]"
+
+# Test 12: FitScript conditional compilation (language test)
+run_test "FitScript else branch (low energy workout)" \
+    "build/fitscript examples/fitscript/conditional_example.fit -o /tmp/test_conditional.fasm && python3 src/vm.py /tmp/test_conditional.fasm --sensor ENERGY_LEVEL=5 | grep -q 'Low Energy Workout'"
+
 echo ""
 echo "=================================="
 echo "Test Results"
@@ -85,4 +93,3 @@ else
     echo -e "\n${RED}Some tests failed.${NC}"
     exit 1
 fi
-

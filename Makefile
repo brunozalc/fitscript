@@ -20,7 +20,6 @@ clean:
 	rm -rf $(BUILD_DIR)/* $(OUTPUT_DIR)/*
 
 test: $(BUILD_DIR)/fitscript
-	$(BUILD_DIR)/fitscript examples/fitscript/leg_day.fit -o $(OUTPUT_DIR)/test.fasm
-	python3 $(SRC_DIR)/vm.py $(OUTPUT_DIR)/test.fasm --sensor ENERGY_LEVEL=8
+	bash tests/test_vm.sh
 
 .PHONY: all clean test

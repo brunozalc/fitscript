@@ -84,7 +84,7 @@ build/fitscript examples/fitscript/leg_day.fit -o output/workout.fasm && \
   python3 src/vm.py output/workout.fasm --sensor ENERGY_LEVEL=8
 
 # Rodar os testes
-bash tests/test_vm.sh
+make test
 ```
 
 ---
@@ -197,8 +197,9 @@ FitWatch é uma pequena máquina virtual que representa a lógica de um smartwat
 - **Program Counter**: `PC`
 - **Sensores**: Dicionário de valores (ex: `ENERGY_LEVEL`, `HEART_RATE`)
 - **Buffer de exercícios**: Lista de saída
+- **Stack**: Pilha LIFO para salvar/restaurar registradores (permite recursão)
 
-### Conjunto de Instruções (7 instruções)
+### Conjunto de Instruções (9 instruções)
 
 | Instrução                | Descrição              | Exemplo                   |
 | ------------------------ | ---------------------- | ------------------------- |
@@ -208,6 +209,8 @@ FitWatch é uma pequena máquina virtual que representa a lógica de um smartwat
 | `JNZ reg label`          | Pula se não-zero       | `JNZ R1 loop`             |
 | `MOV reg value`          | Move valor imediato    | `MOV R0 10`               |
 | `SENSOR reg name`        | Lê sensor              | `SENSOR R0 ENERGY_LEVEL`  |
+| `PUSH reg`               | Empilha o registrador  | `PUSH R0`                 |
+| `POP reg`                | Desempilha em um reg   | `POP R1`                  |
 | `EXERCISE name props...` | Adiciona exercício     | `EXERCISE "Squat" sets:3` |
 | `HALT`                   | Para execução          | `HALT`                    |
 
@@ -275,4 +278,7 @@ python3 src/vm.py examples/assembly/time_based.fasm --sensor TIME_AVAILABLE=45
 
 # Demonstração de multiplicação
 python3 src/vm.py examples/assembly/multiplication.fasm
+
+# Demonstração de pilha (PUSH/POP)
+python3 src/vm.py examples/assembly/stack_demo.fasm
 ```

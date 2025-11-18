@@ -1,0 +1,17 @@
+; FitWatch Assembly - Stack Demonstration
+; Verifies PUSH/POP behavior by restoring a value and using it in a loop
+
+MOV R0 3
+PUSH R0       ; Save the original counter
+MOV R0 1      ; Clobber R0 on purpose
+MOV R1 0      ; Touch R1 to prove stack only stores requested value
+POP R0        ; Restore the original counter (3)
+
+stack_loop:
+JZ R0 stack_done
+EXERCISE "Stack Push-ups" sets:1 reps:12
+DEC R0
+JNZ R0 stack_loop
+
+stack_done:
+HALT

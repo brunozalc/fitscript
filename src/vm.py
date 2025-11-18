@@ -25,6 +25,7 @@ class FitWatchVM:
     - Program counter (PC)
     - Sensor inputs (dictionary)
     - Exercise output buffer (list)
+    - Unbounded stack (list) for PUSH/POP instructions
 
     Instruction Set (Turing Complete):
     1. INC reg          - Increment register by 1
@@ -34,6 +35,8 @@ class FitWatchVM:
     5. MOV reg value    - Load immediate value into register
     6. SENSOR reg name  - Read sensor value into register
     7. EXERCISE name props... - Add exercise to routine output
+    8. PUSH reg         - Push register value onto the stack
+    9. POP reg          - Pop value from the stack into register
     """
 
     def __init__(self, debug: bool = False):
@@ -45,6 +48,7 @@ class FitWatchVM:
         self.program: List[str] = []
         self.debug = debug
         self.cycle_count = 0
+        self.stack: List[int] = []
 
     def set_sensor(self, name: str, value: int) -> None:
         self.sensors[name] = value
@@ -198,6 +202,29 @@ class FitWatchVM:
             self.registers[reg] = self.sensors[sensor_name]
             self.pc += 1
 
+        # PUSH reg
+        elif opcode == "PUSH":
+            reg = operands.strip()
+            if reg not in self.registers:
+                raise ValueError(f"Invalid register: {reg}")
+            self.stack.append(self.registers[reg])
+            if self.debug:
+                print(f"[DEBUG] PUSH {reg} -> stack={self.stack}")
+            self.pc += 1
+
+        # POP reg
+        elif opcode == "POP":
+            reg = operands.strip()
+            if reg not in self.registers:
+                raise ValueError(f"Invalid register: {reg}")
+            if not self.stack:
+                raise ValueError("Stack underflow on POP")
+            value = self.stack.pop()
+            self.registers[reg] = value
+            if self.debug:
+                print(f"[DEBUG] POP -> {reg}={value}, stack={self.stack}")
+            self.pc += 1
+
         # EXERCISE "name" props...
         elif opcode == "EXERCISE":
             if not operands:
@@ -234,6 +261,7 @@ class FitWatchVM:
     def run(self) -> List[Exercise]:
         self.pc = 0
         self.cycle_count = 0
+        self.stack = []
 
         while self.pc < len(self.program):
             instruction = self.program[self.pc]
