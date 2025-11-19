@@ -1,0 +1,19 @@
+routine "Stack Demo" {
+    let rounds = 3;
+
+    // Save the number of rounds before we overwrite it
+    push rounds;
+
+    // Mess up the register on purpose
+    let rounds = 1;
+
+    // Restore value from the stack
+    pop rounds;
+
+    loop rounds times {
+        exercise "Stack Push-ups" {
+            sets: 1;
+            reps: 12;
+        }
+    }
+}

@@ -95,7 +95,7 @@ make test
 // main
 PROGRAM = { STATEMENT } ;
 
-STATEMENT = ROUTINE_DEF | ASSIGNMENT | CONDITIONAL | LOOP | EXERCISE_DEF ;
+STATEMENT = ROUTINE_DEF | ASSIGNMENT | CONDITIONAL | LOOP | EXERCISE_DEF | STACK_OP ;
 
 // statements
 ROUTINE_DEF = "routine" STRING "{" PROGRAM "}" ;
@@ -109,6 +109,8 @@ ASSIGNMENT = "let" IDENTIFIER "=" EXPRESSION ";" ;
 CONDITIONAL = "if" "(" CONDITION ")" "{" PROGRAM "}" [ "else" "{" PROGRAM "}" ] ;
 
 LOOP = "loop" (NUMBER | IDENTIFIER) "times" "{" PROGRAM "}" ;
+
+STACK_OP = "push" IDENTIFIER ";" | "pop" IDENTIFIER ";" ;
 
 // expressões e condicionais
 CONDITION = EXPRESSION ("==" | "!=" | ">" | "<" | ">=" | "<=") EXPRESSION ;
@@ -214,6 +216,8 @@ FitWatch é uma pequena máquina virtual que representa a lógica de um smartwat
 | `EXERCISE name props...` | Adiciona exercício     | `EXERCISE "Squat" sets:3` |
 | `HALT`                   | Para execução          | `HALT`                    |
 
+No nível de FitScript, basta usar `push nome_variavel;` e `pop nome_variavel;` para salvar/restaurar registradores antes e depois de blocos recursivos ou loops profundos. Veja `examples/fitscript/stack_example.fit` e `examples/fitscript/recursive_flow.fit` para roteiros completos que usam a pilha.
+
 ### Uso da VM
 
 ```bash
@@ -255,6 +259,12 @@ build/fitscript examples/fitscript/conditional_example.fit -o output/conditional
 
 # Exemplo com if-else aninhados
 build/fitscript examples/fitscript/if_else_example.fit -o output/if_else.fasm
+
+# Exemplo com pilha (push/pop)
+build/fitscript examples/fitscript/stack_example.fit -o output/stack_example.fasm
+
+# Exemplo com fluxo recursivo usando push/pop
+build/fitscript examples/fitscript/recursive_flow.fit -o output/recursive_flow.fasm
 
 # Treino completo adaptativo
 build/fitscript examples/fitscript/complete_workout.fit -o output/complete.fasm

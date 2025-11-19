@@ -21,6 +21,8 @@ int line_num = 1;
 "loop"                  { return LOOP; }
 "times"                 { return TIMES; }
 "read_sensor"           { return READ_SENSOR; }
+"push"                  { return PUSH; }
+"pop"                   { return POP; }
 
 "=="                    { return EQ; }
 "!="                    { return NEQ; }

@@ -78,6 +78,14 @@ run_test "Stack PUSH/POP restores the original counter" \
 run_test "FitScript else branch (low energy workout)" \
     "build/fitscript examples/fitscript/conditional_example.fit -o /tmp/test_conditional.fasm && python3 src/vm.py /tmp/test_conditional.fasm --sensor ENERGY_LEVEL=5 | grep -q 'Low Energy Workout'"
 
+# Test 13: FitScript stack example (language-level PUSH/POP)
+run_test "FitScript stack example (uses PUSH/POP)" \
+    "build/fitscript examples/fitscript/stack_example.fit -o /tmp/test_stack.fasm && [ \$(python3 src/vm.py /tmp/test_stack.fasm | grep -c 'Stack Push-ups') -eq 3 ]"
+
+# Test 14: FitScript recursive flow (nested stack usage)
+run_test "FitScript recursive flow demo" \
+    "build/fitscript examples/fitscript/recursive_flow.fit -o /tmp/test_recursive.fasm && [ \$(python3 src/vm.py /tmp/test_recursive.fasm | grep -c 'Recursive Leaf') -eq 12 ]"
+
 echo ""
 echo "=================================="
 echo "Test Results"

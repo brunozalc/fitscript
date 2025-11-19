@@ -1,0 +1,33 @@
+routine "Recursive Flow" {
+    let depth = 2; // number of outer calls
+
+    loop depth times {
+        exercise "Recursive Outer" {
+            level: "outer";
+        }
+
+        // Save outer depth before entering inner branch
+        push depth;
+        let depth = 3; // inner "recursive" fan-out
+
+        loop depth times {
+            exercise "Recursive Inner" {
+                level: "inner";
+            }
+
+            // Save inner depth before leaf expansion
+            push depth;
+            let depth = 2; // leaf fan-out
+
+            loop depth times {
+                exercise "Recursive Leaf" {
+                    level: "leaf";
+                }
+            }
+
+            pop depth; // restore inner depth for the next iteration
+        }
+
+        pop depth; // restore outer depth for the next outer call
+    }
+}

@@ -40,7 +40,7 @@ void generate_else_label();
 void generate_endif_label();
 
 /* Loop generation helpers */
-void start_loop(int count);
+void start_loop(int is_var, int value, const char *var_name);
 void end_loop();
 
 /* Global label stack for nested structures */
@@ -61,16 +61,23 @@ int saved_label_count = 0;
         char **props;   // Array of property strings
         int count;      // Number of properties
     } props;
+    struct loop_info {
+        int is_var;
+        int value;
+        char *var_name;
+    } loop_info;
 }
 
-%token ROUTINE EXERCISE LET IF ELSE LOOP TIMES READ_SENSOR
+%token ROUTINE EXERCISE LET IF ELSE LOOP TIMES READ_SENSOR PUSH POP
 %token EQ NEQ GT LT GTE LTE
 %token LBRACE RBRACE LPAREN RPAREN SEMICOLON COLON ASSIGN
 %token <str> IDENTIFIER STRING
 %token <num> NUMBER
 
 %type <cond> condition
-%type <num> comparison_op loop_count
+%type <num> comparison_op
+%type <loop_info> loop_count
+
 %type <str> expression value unit_value sensor_read property_assignment
 %type <props> property_list
 
@@ -97,6 +104,7 @@ statement:
     | assignment
     | conditional
     | loop
+    | stack_statement
     ;
 
 routine_def:
@@ -224,7 +232,10 @@ else_part:
 loop:
     LOOP loop_count TIMES LBRACE
     {
-        start_loop($2);
+        start_loop($2.is_var, $2.value, $2.var_name);
+        if ($2.is_var && $2.var_name) {
+            free($2.var_name);
+        }
     }
     statement_list RBRACE
     {
@@ -232,15 +243,43 @@ loop:
     }
     ;
 
+stack_statement:
+    PUSH IDENTIFIER SEMICOLON
+    {
+        char *reg = get_register($2);
+        if (!reg) {
+            fprintf(stderr, "Error: Cannot PUSH undefined variable '%s'\n", $2);
+            exit(1);
+        }
+        emit_comment("push %s", $2);
+        emit("PUSH %s", reg);
+        free($2);
+    }
+    | POP IDENTIFIER SEMICOLON
+    {
+        char *reg = get_register($2);
+        if (!reg) {
+            reg = allocate_register($2);
+        }
+        emit_comment("pop %s", $2);
+        emit("POP %s", reg);
+        free($2);
+    }
+    ;
+
 loop_count:
     NUMBER
     {
-        $$ = $1;
+        $$.is_var = 0;
+        $$.value = $1;
+        $$.var_name = NULL;
     }
     | IDENTIFIER
     {
-        fprintf(stderr, "Error: Loop count by variable not yet supported\n");
-        exit(1);
+        $$.is_var = 1;
+        $$.value = 0;
+        $$.var_name = strdup($1);
+        free($1);
     }
     ;
 
@@ -498,9 +537,24 @@ void generate_endif_label() {
     }
 }
 
-void start_loop(int count) {
-    emit_comment("loop %d times", count);
-    emit("MOV R0 %d", count);
+void start_loop(int is_var, int value, const char *var_name) {
+    if (is_var) {
+        if (!var_name) {
+            fprintf(stderr, "Error: Invalid loop variable\n");
+            exit(1);
+        }
+        char *reg = get_register(var_name);
+        if (!reg) {
+            fprintf(stderr, "Error: Variable '%s' not defined\n", var_name);
+            exit(1);
+        }
+        emit_comment("loop %s times", var_name);
+        emit("PUSH %s", reg);
+        emit("POP R0");
+    } else {
+        emit_comment("loop %d times", value);
+        emit("MOV R0 %d", value);
+    }
     char *loop_start = new_label("loop_start");
     char *loop_end = new_label("loop_end");
     emit("%s:", loop_start);
