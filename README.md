@@ -216,7 +216,8 @@ FitWatch é uma pequena máquina virtual que representa a lógica de um smartwat
 | `EXERCISE name props...` | Adiciona exercício     | `EXERCISE "Squat" sets:3` |
 | `HALT`                   | Para execução          | `HALT`                    |
 
-No nível de FitScript, basta usar `push nome_variavel;` e `pop nome_variavel;` para salvar/restaurar registradores antes e depois de blocos recursivos ou loops profundos. Veja `examples/fitscript/stack_example.fit` e `examples/fitscript/recursive_flow.fit` para roteiros completos que usam a pilha.
+
+No nível de FitScript, basta usar `push nome_variavel;` e `pop nome_variavel;` para salvar/restaurar registradores antes e depois de blocos recursivos ou loops mais complexos. Veja `examples/fitscript/stack_example.fit` e `examples/fitscript/recursive_flow.fit`, são programas completos que usam a pilha.
 
 ### Uso da VM
 
