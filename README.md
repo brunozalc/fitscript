@@ -91,7 +91,7 @@ make test
 
 ## Gramática
 
-```ebnf-like
+```ebnf
 // main
 PROGRAM = { STATEMENT } ;
 
@@ -201,7 +201,7 @@ FitWatch é uma pequena máquina virtual que representa a lógica de um smartwat
 - **Buffer de exercícios**: Lista de saída
 - **Stack**: Pilha LIFO para salvar/restaurar registradores (permite recursão)
 
-### Conjunto de Instruções (9 instruções)
+### Conjunto de Instruções (10 instruções)
 
 | Instrução                | Descrição              | Exemplo                   |
 | ------------------------ | ---------------------- | ------------------------- |
